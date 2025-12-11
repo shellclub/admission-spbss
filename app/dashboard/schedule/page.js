@@ -968,75 +968,82 @@ export default function SchedulePage() {
                 ) : (
                     // Table Component
                     <div className={`overflow-hidden ${glassCard} p-0 animate-slide-up delay-200`}>
-                        {/* Texture Overlay */}
-                        <div className="absolute inset-0 bg-dot-pattern opacity-10 pointer-events-none"></div>
+                        {/* Schedule Table Container (Card) */}
+                        <div className={`rounded-3xl border shadow-xl backdrop-blur-3xl overflow-hidden transition-all duration-300 relative ${isDarkMode
+                            ? 'bg-[#1e293b]/70 border-white/5 shadow-black/20'
+                            : 'bg-white/80 border-slate-200/60 shadow-slate-200/50'
+                            }`}>
 
-                        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-white/10 relative z-10">
-                            <table className="w-full table-fixed border-collapse bg-white dark:bg-[#1e293b]">
-                                <thead className={`text-xs font-bold uppercase ${isDarkMode ? 'bg-[#151925] text-slate-400' : 'bg-slate-50 text-slate-600'}`}>
-                                    <tr>
-                                        <th className="p-3 w-[80px] border-b border-r border-slate-200 dark:border-white/10 text-center">{t('timeDay')}</th>
-                                        <th className="p-2 w-[50px] border-b border-r border-slate-200 dark:border-white/10 text-center text-[10px] bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400">{t('activity')}</th>
-                                        {periods.slice(0, 4).map((p, i) => (
-                                            <th key={p} className="p-2 border-b border-l border-slate-200 dark:border-white/10 text-center font-bold">
-                                                <span className="block text-xs">{t('period')} {p}</span>
-                                                <span className="block text-[10px] opacity-60">{timeSlots[i]}</span>
-                                            </th>
-                                        ))}
-                                        {/* Lunch Break Header */}
-                                        <th className="p-2 w-[50px] border-b border-l border-slate-200 dark:border-white/10 text-center bg-orange-100 dark:bg-orange-900/20 font-bold text-orange-600 dark:text-orange-400">
-                                            <span className="block text-[10px]">{t('lunch')}</span>
-                                        </th>
-                                        {periods.slice(5).map((p, i) => (
-                                            <th key={p} className="p-2 border-b border-l border-slate-200 dark:border-white/10 text-center font-bold">
-                                                <span className="block text-xs">{t('period')} {p}</span>
-                                                <span className="block text-[10px] opacity-60">{timeSlots[i + 5]}</span>
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {days.map(day => (
-                                        <tr key={day} className={`text-sm border-b-2 ${isDarkMode ? 'border-white/10 divide-x divide-white/5' : 'border-slate-300 divide-x divide-slate-200'}`}>
-                                            <td className="p-4 font-bold border-r-2 border-slate-300 dark:border-white/10 text-center bg-white dark:bg-[#151925]">
-                                                {day === 'วันจันทร์' ? t('monday') :
-                                                    day === 'วันอังคาร' ? t('tuesday') :
-                                                        day === 'วันพุธ' ? t('wednesday') :
-                                                            day === 'วันพฤหัสบดี' ? t('thursday') :
-                                                                day === 'วันศุกร์' ? t('friday') :
-                                                                    day === 'วันเสาร์' ? t('saturday') :
-                                                                        day === 'วันอาทิตย์' ? t('sunday') : day}
-                                            </td>
+                            {/* Responsive Scroll Wrapper */}
+                            <div className="overflow-x-auto custom-scrollbar pb-2">
+                                <div className="min-w-[1200px]"> {/* Force min-width to ensure table structure holds */}
+                                    <table className="w-full table-fixed border-collapse bg-transparent">
+                                        <thead className={`text-xs font-bold uppercase ${isDarkMode ? 'bg-[#151925] text-slate-400' : 'bg-slate-50 text-slate-600'}`}>
+                                            <tr>
+                                                <th className="p-3 w-[80px] border-b border-r border-slate-200 dark:border-white/10 text-center">{t('timeDay')}</th>
+                                                <th className="p-2 w-[50px] border-b border-r border-slate-200 dark:border-white/10 text-center text-[10px] bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400">{t('activity')}</th>
+                                                {periods.slice(0, 4).map((p, i) => (
+                                                    <th key={p} className="p-2 border-b border-l border-slate-200 dark:border-white/10 text-center font-bold">
+                                                        <span className="block text-xs">{t('period')} {p}</span>
+                                                        <span className="block text-[10px] opacity-60">{timeSlots[i]}</span>
+                                                    </th>
+                                                ))}
+                                                {/* Lunch Break Header */}
+                                                <th className="p-2 w-[50px] border-b border-l border-slate-200 dark:border-white/10 text-center bg-orange-100 dark:bg-orange-900/20 font-bold text-orange-600 dark:text-orange-400">
+                                                    <span className="block text-[10px]">{t('lunch')}</span>
+                                                </th>
+                                                {periods.slice(5).map((p, i) => (
+                                                    <th key={p} className="p-2 border-b border-l border-slate-200 dark:border-white/10 text-center font-bold">
+                                                        <span className="block text-xs">{t('period')} {p}</span>
+                                                        <span className="block text-[10px] opacity-60">{timeSlots[i + 5]}</span>
+                                                    </th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {days.map(day => (
+                                                <tr key={day} className={`text-sm border-b-2 ${isDarkMode ? 'border-white/10 divide-x divide-white/5' : 'border-slate-300 divide-x divide-slate-200'}`}>
+                                                    <td className="p-4 font-bold border-r-2 border-slate-300 dark:border-white/10 text-center bg-white dark:bg-[#151925]">
+                                                        {day === 'วันจันทร์' ? t('monday') :
+                                                            day === 'วันอังคาร' ? t('tuesday') :
+                                                                day === 'วันพุธ' ? t('wednesday') :
+                                                                    day === 'วันพฤหัสบดี' ? t('thursday') :
+                                                                        day === 'วันศุกร์' ? t('friday') :
+                                                                            day === 'วันเสาร์' ? t('saturday') :
+                                                                                day === 'วันอาทิตย์' ? t('sunday') : day}
+                                                    </td>
 
-                                            {/* Activity Column (Flag Ceremony) */}
-                                            {day === 'วันจันทร์' && (
-                                                <td rowSpan={days.length} className="border-r border-slate-200 dark:border-white/10 bg-pink-100 dark:bg-pink-900/20 align-middle text-center p-0 relative w-[50px]">
-                                                    <div className="h-full w-full flex items-center justify-center">
-                                                        <span className="-rotate-90 whitespace-nowrap text-xs font-bold text-pink-600 dark:text-pink-400">
-                                                            {t('flagCeremony')}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            )}
+                                                    {/* Activity Column (Flag Ceremony) */}
+                                                    {day === 'วันจันทร์' && (
+                                                        <td rowSpan={days.length} className="border-r border-slate-200 dark:border-white/10 bg-pink-100 dark:bg-pink-900/20 align-middle text-center p-0 relative w-[50px]">
+                                                            <div className="h-full w-full flex items-center justify-center">
+                                                                <span className="-rotate-90 whitespace-nowrap text-xs font-bold text-pink-600 dark:text-pink-400">
+                                                                    {t('flagCeremony')}
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                    )}
 
-                                            {periods.slice(0, 4).map(period => renderSlot(day, period))}
+                                                    {periods.slice(0, 4).map(period => renderSlot(day, period))}
 
-                                            {/* Lunch Break Column */}
-                                            {day === 'วันจันทร์' && (
-                                                <td rowSpan={days.length} className="border-l border-slate-200 dark:border-white/10 text-center align-middle bg-orange-50 dark:bg-orange-900/10 p-0 relative w-[50px]">
-                                                    <div className="h-full w-full flex items-center justify-center">
-                                                        <span className="-rotate-90 whitespace-nowrap text-xs font-bold text-orange-600 dark:text-orange-400">
-                                                            {t('lunchBreak')}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            )}
+                                                    {/* Lunch Break Column */}
+                                                    {day === 'วันจันทร์' && (
+                                                        <td rowSpan={days.length} className="border-l border-slate-200 dark:border-white/10 text-center align-middle bg-orange-50 dark:bg-orange-900/10 p-0 relative w-[50px]">
+                                                            <div className="h-full w-full flex items-center justify-center">
+                                                                <span className="-rotate-90 whitespace-nowrap text-xs font-bold text-orange-600 dark:text-orange-400">
+                                                                    {t('lunchBreak')}
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                    )}
 
-                                            {periods.slice(5).map(period => renderSlot(day, period))}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                                    {periods.slice(5).map(period => renderSlot(day, period))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -1044,181 +1051,187 @@ export default function SchedulePage() {
                 {/* --- 3. Modals --- */}
 
                 {/* Manual Add Modal */}
-                {showManualModal && mounted && createPortal(
-                    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-fade-in">
-                        <div className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity" onClick={() => setShowManualModal(false)}></div>
-                        <form onSubmit={handleManualAddSubmit} className={`relative w-full max-w-md rounded-[32px] p-8 shadow-2xl backdrop-blur-3xl border ${isDarkMode ? 'bg-[#151925]/90 border-white/10' : 'bg-white/95 border-slate-200'}`}>
-                            <h3 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{t('manualAddTitle')}</h3>
-                            <button type="button" onClick={() => setShowManualModal(false)} className="absolute top-4 right-4 p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5"><X size={20} className={isDarkMode ? 'text-white' : 'text-slate-600'} /></button>
+                {
+                    showManualModal && mounted && createPortal(
+                        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-fade-in">
+                            <div className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity" onClick={() => setShowManualModal(false)}></div>
+                            <form onSubmit={handleManualAddSubmit} className={`relative w-full max-w-md rounded-[32px] p-8 shadow-2xl backdrop-blur-3xl border ${isDarkMode ? 'bg-[#151925]/90 border-white/10' : 'bg-white/95 border-slate-200'}`}>
+                                <h3 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{t('manualAddTitle')}</h3>
+                                <button type="button" onClick={() => setShowManualModal(false)} className="absolute top-4 right-4 p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5"><X size={20} className={isDarkMode ? 'text-white' : 'text-slate-600'} /></button>
 
-                            <div className="space-y-4">
-                                {/* Day */}
-                                <div>
-                                    <label className={labelClass}>{t('day')}</label>
-                                    <div className="relative">
-                                        <select name="day" className={inputGlass} value={manualFormData.day} onChange={e => setManualFormData({ ...manualFormData, day: e.target.value })}>
-                                            {days.map(d => <option key={d} value={d}>{d}</option>)}
-                                        </select>
-                                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" size={16} />
-                                    </div>
-                                </div>
-
-                                {/* Subject */}
-                                <div>
-                                    <label className={labelClass}>{t('subject')}</label>
-                                    <div className="relative">
-                                        <select
-                                            name="subject_id"
-                                            className={inputGlass}
-                                            required
-                                            value={manualFormData.subject_id}
-                                            onChange={e => {
-                                                const id = e.target.value;
-                                                const sub = options.subjects?.find(s => s.id == id);
-                                                const duration = sub ? sub.theory_hours + sub.practice_hours : 1;
-                                                setManualFormData({
-                                                    ...manualFormData,
-                                                    subject_id: id,
-                                                    teacher_id: sub ? sub.teacher_id : '',
-                                                    room_id: sub ? sub.teacher_room_id : '',
-                                                    duration: duration || 1,
-                                                    class_level: filters.classLevel || '',
-                                                });
-                                            }}
-                                        >
-                                            <option value="">{t('select')}</option>
-                                            {options.subjects?.map(s => <option key={s.id} value={s.id}>{s.code} - {s.name} ({s.theory_hours + s.practice_hours} {t('duration')})</option>)}
-                                        </select>
-                                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" size={16} />
-                                    </div>
-                                </div>
-
-                                {/* Teacher */}
-                                <div>
-                                    <label className={labelClass}>{t('teacher')}</label>
-                                    <div className="relative">
-                                        <select name="teacher_id" className={inputGlass} required value={manualFormData.teacher_id} onChange={e => setManualFormData({ ...manualFormData, teacher_id: e.target.value })}>
-                                            <option value="">{t('select')}</option>
-                                            {options.teachers?.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-                                        </select>
-                                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" size={16} />
-                                    </div>
-                                </div>
-
-                                {/* Room */}
-                                <div>
-                                    <label className={labelClass}>{t('room')}</label>
-                                    <div className="relative">
-                                        <select name="room_id" className={inputGlass} value={manualFormData.room_id} onChange={e => setManualFormData({ ...manualFormData, room_id: e.target.value })}>
-                                            <option value="">{t('select')}</option>
-                                            {options.rooms?.map(r => <option key={r.id} value={r.id}>{r.name} ({r.type})</option>)}
-                                        </select>
-                                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" size={16} />
-                                    </div>
-                                </div>
-
-                                {/* Class Level */}
-                                <div>
-                                    <label className={labelClass}>{t('classLevel')}</label>
-                                    <input type="text" name="class_level" className={inputGlass} required placeholder="e.g. 1/1" value={manualFormData.class_level} onChange={e => setManualFormData({ ...manualFormData, class_level: e.target.value })} />
-                                </div>
-
-                                {/* Start Period & Duration */}
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-4">
+                                    {/* Day */}
                                     <div>
-                                        <label className={labelClass}>{t('startPeriod')}</label>
-                                        <input type="number" name="start_period" className={inputGlass} min="1" max="10" required value={manualFormData.start_period} onChange={e => setManualFormData({ ...manualFormData, start_period: parseInt(e.target.value) })} />
-                                    </div>
-                                    <div>
-                                        <label className={labelClass}>{t('duration')}</label>
-                                        <input type="number" name="duration" className={inputGlass} min="1" max={10 - manualFormData.start_period + 1} required readOnly style={{ backgroundColor: isDarkMode ? '#1e293b' : '#f0f4f8' }} value={manualFormData.duration} />
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div className="flex justify-end gap-3 mt-8">
-                                <button type="button" onClick={() => setShowManualModal(false)} className={`py-3 px-5 rounded-xl font-bold text-sm border ${isDarkMode ? 'border-white/10 text-white/70 hover:bg-white/5' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>{t('cancel')}</button>
-                                <button type="submit" className="py-3 px-5 rounded-xl font-bold text-sm bg-red-600 hover:bg-red-700 text-white shadow-md shadow-red-500/30">{t('save')}</button>
-                            </div>
-                        </form>
-                    </div>,
-                    document.body
-                )}
-
-                {/* Clear Table Modal */}
-                {showClearModal && mounted && createPortal(
-                    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-fade-in">
-                        <div className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity" onClick={() => setShowClearModal(false)}></div>
-                        <div className={`relative w-full max-w-md rounded-[32px] p-8 shadow-2xl backdrop-blur-3xl border ${isDarkMode ? 'bg-slate-900/95 border-white/10' : 'bg-white/95 border-slate-200'}`}>
-                            <h3 className={`text-2xl font-bold mb-6 text-red-600`}>{t('clearTableBtn')}</h3>
-                            <button type="button" onClick={() => setShowClearModal(false)} className="absolute top-4 right-4 p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5"><X size={20} className={isDarkMode ? 'text-white' : 'text-slate-600'} /></button>
-
-                            <div className="space-y-4">
-                                {/* Term */}
-                                <div>
-                                    <label className={labelClass}>{t('term')}</label>
-                                    <input type="text" className={inputGlass} readOnly value={filters.term} />
-                                </div>
-
-                                {/* Clear Mode */}
-                                <div>
-                                    <label className={labelClass}>{t('warning')}</label>
-                                    <div className="relative">
-                                        <select name="mode" className={inputGlass} value={clearFormData.mode} onChange={e => setClearFormData({ mode: e.target.value, value: '' })}>
-                                            <option value="all">{t('all')}</option>
-                                            <option value="dept">{t('department')}</option>
-                                            <option value="class">{t('classLevel')}</option>
-                                            <option value="teacher">{t('teacher')}</option>
-                                        </select>
-                                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" size={16} />
-                                    </div>
-                                </div>
-
-                                {/* Clear Value (Dynamic Input) */}
-                                {(clearFormData.mode !== 'all') && (
-                                    <div>
-                                        <label className={labelClass}>{t('select')}</label>
+                                        <label className={labelClass}>{t('day')}</label>
                                         <div className="relative">
-                                            <select name="value" className={inputGlass} required value={clearFormData.value} onChange={e => setClearFormData({ ...clearFormData, value: e.target.value })}>
-                                                <option value="">{t('select')}</option>
-                                                {clearFormData.mode === 'dept' && options.depts?.map(d => <option key={d.name} value={d.name}>{d.name}</option>)}
-                                                {clearFormData.mode === 'class' && [...new Set(options.levels?.map(l => l.level) || [])].map(level => <option key={level} value={level}>{level}</option>)}
-                                                {clearFormData.mode === 'teacher' && options.teachers?.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                                            <select name="day" className={inputGlass} value={manualFormData.day} onChange={e => setManualFormData({ ...manualFormData, day: e.target.value })}>
+                                                {days.map(d => <option key={d} value={d}>{d}</option>)}
                                             </select>
                                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" size={16} />
                                         </div>
                                     </div>
-                                )}
 
+                                    {/* Subject */}
+                                    <div>
+                                        <label className={labelClass}>{t('subject')}</label>
+                                        <div className="relative">
+                                            <select
+                                                name="subject_id"
+                                                className={inputGlass}
+                                                required
+                                                value={manualFormData.subject_id}
+                                                onChange={e => {
+                                                    const id = e.target.value;
+                                                    const sub = options.subjects?.find(s => s.id == id);
+                                                    const duration = sub ? sub.theory_hours + sub.practice_hours : 1;
+                                                    setManualFormData({
+                                                        ...manualFormData,
+                                                        subject_id: id,
+                                                        teacher_id: sub ? sub.teacher_id : '',
+                                                        room_id: sub ? sub.teacher_room_id : '',
+                                                        duration: duration || 1,
+                                                        class_level: filters.classLevel || '',
+                                                    });
+                                                }}
+                                            >
+                                                <option value="">{t('select')}</option>
+                                                {options.subjects?.map(s => <option key={s.id} value={s.id}>{s.code} - {s.name} ({s.theory_hours + s.practice_hours} {t('duration')})</option>)}
+                                            </select>
+                                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" size={16} />
+                                        </div>
+                                    </div>
+
+                                    {/* Teacher */}
+                                    <div>
+                                        <label className={labelClass}>{t('teacher')}</label>
+                                        <div className="relative">
+                                            <select name="teacher_id" className={inputGlass} required value={manualFormData.teacher_id} onChange={e => setManualFormData({ ...manualFormData, teacher_id: e.target.value })}>
+                                                <option value="">{t('select')}</option>
+                                                {options.teachers?.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                                            </select>
+                                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" size={16} />
+                                        </div>
+                                    </div>
+
+                                    {/* Room */}
+                                    <div>
+                                        <label className={labelClass}>{t('room')}</label>
+                                        <div className="relative">
+                                            <select name="room_id" className={inputGlass} value={manualFormData.room_id} onChange={e => setManualFormData({ ...manualFormData, room_id: e.target.value })}>
+                                                <option value="">{t('select')}</option>
+                                                {options.rooms?.map(r => <option key={r.id} value={r.id}>{r.name} ({r.type})</option>)}
+                                            </select>
+                                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" size={16} />
+                                        </div>
+                                    </div>
+
+                                    {/* Class Level */}
+                                    <div>
+                                        <label className={labelClass}>{t('classLevel')}</label>
+                                        <input type="text" name="class_level" className={inputGlass} required placeholder="e.g. 1/1" value={manualFormData.class_level} onChange={e => setManualFormData({ ...manualFormData, class_level: e.target.value })} />
+                                    </div>
+
+                                    {/* Start Period & Duration */}
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className={labelClass}>{t('startPeriod')}</label>
+                                            <input type="number" name="start_period" className={inputGlass} min="1" max="10" required value={manualFormData.start_period} onChange={e => setManualFormData({ ...manualFormData, start_period: parseInt(e.target.value) })} />
+                                        </div>
+                                        <div>
+                                            <label className={labelClass}>{t('duration')}</label>
+                                            <input type="number" name="duration" className={inputGlass} min="1" max={10 - manualFormData.start_period + 1} required readOnly style={{ backgroundColor: isDarkMode ? '#1e293b' : '#f0f4f8' }} value={manualFormData.duration} />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div className="flex justify-end gap-3 mt-8">
+                                    <button type="button" onClick={() => setShowManualModal(false)} className={`py-3 px-5 rounded-xl font-bold text-sm border ${isDarkMode ? 'border-white/10 text-white/70 hover:bg-white/5' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>{t('cancel')}</button>
+                                    <button type="submit" className="py-3 px-5 rounded-xl font-bold text-sm bg-red-600 hover:bg-red-700 text-white shadow-md shadow-red-500/30">{t('save')}</button>
+                                </div>
+                            </form>
+                        </div>,
+                        document.body
+                    )
+                }
+
+                {/* Clear Table Modal */}
+                {
+                    showClearModal && mounted && createPortal(
+                        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-fade-in">
+                            <div className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity" onClick={() => setShowClearModal(false)}></div>
+                            <div className={`relative w-full max-w-md rounded-[32px] p-8 shadow-2xl backdrop-blur-3xl border ${isDarkMode ? 'bg-slate-900/95 border-white/10' : 'bg-white/95 border-slate-200'}`}>
+                                <h3 className={`text-2xl font-bold mb-6 text-red-600`}>{t('clearTableBtn')}</h3>
+                                <button type="button" onClick={() => setShowClearModal(false)} className="absolute top-4 right-4 p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5"><X size={20} className={isDarkMode ? 'text-white' : 'text-slate-600'} /></button>
+
+                                <div className="space-y-4">
+                                    {/* Term */}
+                                    <div>
+                                        <label className={labelClass}>{t('term')}</label>
+                                        <input type="text" className={inputGlass} readOnly value={filters.term} />
+                                    </div>
+
+                                    {/* Clear Mode */}
+                                    <div>
+                                        <label className={labelClass}>{t('warning')}</label>
+                                        <div className="relative">
+                                            <select name="mode" className={inputGlass} value={clearFormData.mode} onChange={e => setClearFormData({ mode: e.target.value, value: '' })}>
+                                                <option value="all">{t('all')}</option>
+                                                <option value="dept">{t('department')}</option>
+                                                <option value="class">{t('classLevel')}</option>
+                                                <option value="teacher">{t('teacher')}</option>
+                                            </select>
+                                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" size={16} />
+                                        </div>
+                                    </div>
+
+                                    {/* Clear Value (Dynamic Input) */}
+                                    {(clearFormData.mode !== 'all') && (
+                                        <div>
+                                            <label className={labelClass}>{t('select')}</label>
+                                            <div className="relative">
+                                                <select name="value" className={inputGlass} required value={clearFormData.value} onChange={e => setClearFormData({ ...clearFormData, value: e.target.value })}>
+                                                    <option value="">{t('select')}</option>
+                                                    {clearFormData.mode === 'dept' && options.depts?.map(d => <option key={d.name} value={d.name}>{d.name}</option>)}
+                                                    {clearFormData.mode === 'class' && [...new Set(options.levels?.map(l => l.level) || [])].map(level => <option key={level} value={level}>{level}</option>)}
+                                                    {clearFormData.mode === 'teacher' && options.teachers?.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                                                </select>
+                                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" size={16} />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                </div>
+
+                                <div className="flex justify-end gap-3 mt-8">
+                                    <button type="button" onClick={() => setShowClearModal(false)} className={`py-3 px-5 rounded-xl font-bold text-sm border ${isDarkMode ? 'border-white/10 text-white/70 hover:bg-white/5' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>{t('cancel')}</button>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (clearFormData.mode !== 'all' && !clearFormData.value) {
+                                                alert(t('emptyStateTitle'));
+                                                return;
+                                            }
+                                            handleClearSubmit(clearFormData.mode, clearFormData.value);
+                                        }}
+                                        className="py-3 px-5 rounded-xl font-bold text-sm bg-red-600 hover:bg-red-700 text-white shadow-md shadow-red-500/30"
+                                    >
+                                        {t('confirm')}
+                                    </button>
+                                </div>
                             </div>
+                        </div>,
+                        document.body
+                    )
+                }
 
-                            <div className="flex justify-end gap-3 mt-8">
-                                <button type="button" onClick={() => setShowClearModal(false)} className={`py-3 px-5 rounded-xl font-bold text-sm border ${isDarkMode ? 'border-white/10 text-white/70 hover:bg-white/5' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>{t('cancel')}</button>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        if (clearFormData.mode !== 'all' && !clearFormData.value) {
-                                            alert(t('emptyStateTitle'));
-                                            return;
-                                        }
-                                        handleClearSubmit(clearFormData.mode, clearFormData.value);
-                                    }}
-                                    className="py-3 px-5 rounded-xl font-bold text-sm bg-red-600 hover:bg-red-700 text-white shadow-md shadow-red-500/30"
-                                >
-                                    {t('confirm')}
-                                </button>
-                            </div>
-                        </div>
-                    </div>,
-                    document.body
-                )}
-
-            </div>
+            </div >
             {/* Center Buttons for Student (Footer) */}
-            {role === 'student' && (
-                <div className="hidden"></div>
-            )}
-        </div>
+            {
+                role === 'student' && (
+                    <div className="hidden"></div>
+                )
+            }
+        </div >
     );
 }

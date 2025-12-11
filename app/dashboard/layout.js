@@ -69,11 +69,10 @@ function DashboardContent({ children }) {
 
          {/* Main Content Area */}
          <div
-            className="flex flex-1 flex-col h-full overflow-hidden transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) relative z-10"
-            style={{ marginLeft: isSidebarCollapsed ? '80px' : '280px' }}
+            className={`flex flex-1 flex-col h-full overflow-hidden transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) relative z-10 ml-0 ${isSidebarCollapsed ? 'md:ml-20' : 'md:ml-[280px]'}`}
          >
             <Header />
-            <main className="flex-1 overflow-y-auto px-6 py-4 scroll-smooth custom-scrollbar relative z-10">
+            <main className="flex-1 overflow-y-auto p-2 md:px-6 md:py-4 scroll-smooth custom-scrollbar relative z-10">
                {children}
             </main>
          </div>
