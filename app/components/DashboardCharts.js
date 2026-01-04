@@ -52,7 +52,7 @@ export default function DashboardCharts({ applicants }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-3xl p-6"
+                className="glass-card dark:glass-card backdrop-blur-[50px] backdrop-saturate-150 rounded-3xl p-6"
             >
                 <h3 className="text-lg font-bold mb-6 dark:text-white flex items-center gap-2">
                     <span className="w-2 h-6 bg-blue-500 rounded-full"></span>
@@ -91,7 +91,7 @@ export default function DashboardCharts({ applicants }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-3xl p-6"
+                className="glass-card dark:glass-card backdrop-blur-[50px] backdrop-saturate-150 rounded-3xl p-6"
             >
                 <h3 className="text-lg font-bold mb-6 dark:text-white flex items-center gap-2">
                     <span className="w-2 h-6 bg-orange-500 rounded-full"></span>

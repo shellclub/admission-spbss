@@ -2,9 +2,28 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import bcrypt from 'bcryptjs';
 import { logAction } from '@/lib/logger';
+import { checkRateLimit, getClientIP } from '@/lib/rateLimit';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
 
 export async function POST(request) {
     try {
+        // 0. Security Checks
+        const ip = getClientIP(request);
+        const limit = checkRateLimit(ip, 'api');
+
+        if (!limit.success) {
+            return NextResponse.json(
+                { message: limit.message || 'Too many requests' },
+                { status: 429, headers: { 'Retry-After': limit.retryAfter } }
+            );
+        }
+
+        const session = await getServerSession(authOptions);
+        if (!session || session.user.role !== 'admin') {
+            return NextResponse.json({ message: 'Unauthorized: Admin access required' }, { status: 403 });
+        }
+
         const { type, data, force } = await request.json(); // รับ parameter 'force' เพิ่ม
 
         // Helper: แปลง undefined เป็น null

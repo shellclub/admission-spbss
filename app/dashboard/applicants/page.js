@@ -477,7 +477,7 @@ export default function ApplicantsPage() {
                             {/* Desktop Table View - hidden on small screens */}
                             <div className="hidden lg:block overflow-hidden rounded-3xl border border-slate-100 dark:border-slate-800">
                                 <table className="w-full text-left">
-                                    <thead className="bg-slate-50/80 dark:bg-slate-900/50">
+                                    <thead className="bg-slate-200/50 dark:bg-slate-800/40 backdrop-blur-[50px]">
                                         <tr>
                                             <th className="px-6 py-5 text-center w-16">
                                                 <input

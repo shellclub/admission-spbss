@@ -9,6 +9,8 @@ services:
       target: runner
     ports:
       - "3000:3000"
+    env_file:
+      - production.env
     environment:
       - NODE_ENV=production
       - DB_HOST=host.docker.internal # Adjust if using a separate db container

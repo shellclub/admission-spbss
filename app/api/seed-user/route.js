@@ -6,8 +6,13 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 export async function GET() {
+    // SECURITY: Only allow in development
+    if (process.env.NODE_ENV !== 'development') {
+        return NextResponse.json({ error: 'Forbidden in production' }, { status: 403 });
+    }
+
     try {
-        const hashedPassword = await bcrypt.hash('1234', 10);
+        const hashedPassword = await bcrypt.hash('admin123', 10);
 
         // Check if admin exists
         const existingUser = await prisma.user.findUnique({

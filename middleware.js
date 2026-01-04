@@ -19,11 +19,13 @@ export async function middleware(request) {
         Object.entries(securityHeaders).forEach(([key, value]) => {
             response.headers.set(key, value);
         });
+        // Content Security Policy
+        response.headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://*.googleusercontent.com; connect-src 'self' https://*.googleapis.com;");
         return response;
     };
 
     // Public routes that don't require authentication
-    const publicPaths = ['/login', '/api/auth', '/api/setup'];
+    const publicPaths = ['/login', '/api/auth', '/api/setup', '/api/public'];
     const isPublicPath = publicPaths.some(path => pathname.startsWith(path));
 
     // Static files and assets don't need auth
@@ -49,11 +51,18 @@ export async function middleware(request) {
         secret: secret,
     });
 
-    // Protected routes - redirect to login if no token
-    const protectedPaths = ['/dashboard', '/schedule', '/print'];
-    const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path));
+    // Protected routes - ALL DASHBOARD + ALL API (except public)
+    // We default to protecting everything that isn't explicitly public
+    // effectively making it a whitelist approach for public routes
+    const isProtectedPath = pathname.startsWith('/dashboard') ||
+        pathname.startsWith('/schedule') ||
+        pathname.startsWith('/print') ||
+        (pathname.startsWith('/api/') && !isPublicPath);
 
     if (isProtectedPath && !token) {
+        if (pathname.startsWith('/api/')) {
+            return addSecurityHeaders(NextResponse.json({ message: 'Unauthorized' }, { status: 401 }));
+        }
         const loginUrl = new URL('/login', request.url);
         loginUrl.searchParams.set('callbackUrl', pathname);
         return addSecurityHeaders(NextResponse.redirect(loginUrl));

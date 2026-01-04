@@ -43,7 +43,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
                 {/* Total Applicants */}
-                <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-3xl p-6 group hover:scale-[1.02] transition-transform duration-300">
+                <div className="glass-card dark:glass-card backdrop-blur-[50px] backdrop-saturate-150 rounded-3xl p-6 group hover:scale-[1.02] transition-transform duration-300">
                     <div className="flex items-start justify-between">
                         <div>
                             <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">ผู้สมัครทั้งหมด</p>
@@ -57,7 +57,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Male */}
-                <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-3xl p-6 group hover:scale-[1.02] transition-transform duration-300">
+                <div className="glass-card dark:glass-card backdrop-blur-[50px] backdrop-saturate-150 rounded-3xl p-6 group hover:scale-[1.02] transition-transform duration-300">
                     <div className="flex items-start justify-between">
                         <div>
                             <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">เพศชาย</p>
@@ -71,7 +71,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Female */}
-                <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-3xl p-6 group hover:scale-[1.02] transition-transform duration-300">
+                <div className="glass-card dark:glass-card backdrop-blur-[50px] backdrop-saturate-150 rounded-3xl p-6 group hover:scale-[1.02] transition-transform duration-300">
                     <div className="flex items-start justify-between">
                         <div>
                             <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">เพศหญิง</p>
@@ -85,7 +85,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Sports Types */}
-                <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-3xl p-6 group hover:scale-[1.02] transition-transform duration-300">
+                <div className="glass-card dark:glass-card backdrop-blur-[50px] backdrop-saturate-150 rounded-3xl p-6 group hover:scale-[1.02] transition-transform duration-300">
                     <div className="flex items-start justify-between">
                         <div>
                             <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">ประเภทกีฬา</p>
@@ -104,7 +104,7 @@ export default function DashboardPage() {
 
             <div className="grid grid-cols-1 gap-6">
                 {/* Recent Applicants */}
-                <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-3xl p-6">
+                <div className="glass-card dark:glass-card backdrop-blur-[50px] backdrop-saturate-150 rounded-3xl p-6">
                     <h3 className="text-lg font-bold mb-6 dark:text-white flex items-center gap-2">
                         <Users size={20} className="text-blue-500" />
                         ผู้สมัครล่าสุด

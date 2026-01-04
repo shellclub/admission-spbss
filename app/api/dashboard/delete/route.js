@@ -1,8 +1,23 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { logAction } from '@/lib/logger';
+import { checkRateLimit, getClientIP } from '@/lib/rateLimit';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
 
 export async function DELETE(request) {
+  // 0. Security Checks
+  const ip = getClientIP(request);
+  const limit = checkRateLimit(ip, 'api');
+  if (!limit.success) {
+    return NextResponse.json({ message: limit.message }, { status: 429 });
+  }
+
+  const session = await getServerSession(authOptions);
+  if (!session || session.user.role !== 'admin') {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
+  }
+
   try {
     const { type, id } = await request.json();
     let sql = '';
