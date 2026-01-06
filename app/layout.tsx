@@ -44,7 +44,7 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "EduSched AI - ระบบบริหารการศึกษา",
+  title: "ใบสมัครสอบ",
   description: "ระบบบริหารจัดการตารางสอนและข้อมูลวิทยาลัย",
 };
 

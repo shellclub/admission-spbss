@@ -46,9 +46,9 @@ export async function POST(request) {
       phone: formData.get("phone"),
       postalCode: formData.get("postalCode"),
       schoolPostalCode: formData.get("schoolPostalCode"),
-      examApplicationNumber: formData.get("examApplicationNumber"),
-      targetSchool: formData.get("targetSchool"),
-      schoolCode: formData.get("schoolCode"),
+      examApplicationNumber: formData.get("examApplicationNumber") || "",
+      targetSchool: formData.get("targetSchool") || "โรงเรียนกีฬาจังหวัดสุพรรณบุรี",
+      schoolCode: formData.get("schoolCode") || "1109",
       race: formData.get("race"),
       nationality: formData.get("nationality"),
       religion: formData.get("religion"),
@@ -126,7 +126,9 @@ export async function POST(request) {
 
     // Extract other fields
     // Header Info
-    data.examApplicationNumber = formData.get("examApplicationNumber");
+    // Convert empty string to null to allow duplicates of "no exam number"
+    const rawExamAppNum = formData.get("examApplicationNumber");
+    data.examApplicationNumber = rawExamAppNum === "" ? null : rawExamAppNum;
     data.targetSchool = formData.get("targetSchool");
     data.schoolCode = formData.get("schoolCode");
 
@@ -208,7 +210,7 @@ export async function POST(request) {
 
         if (!fileValidation.valid) {
           console.warn(`File validation failed for ${fieldName}: ${fileValidation.error}`);
-          return null; // Skip invalid files silently
+          throw new Error(`ไฟล์ ${fieldName} ไม่ถูกต้อง: ${fileValidation.error}`);
         }
 
         const bytes = await file.arrayBuffer();
@@ -267,12 +269,15 @@ export async function POST(request) {
     data.photoPath = photoPath;
 
     // Check for Duplicates (Name or ExamApplicationNumber)
+    // Only check examApplicationNumber if it exists (not empty/null)
+    const duplicateChecks = [{ name: data.name }];
+    if (data.examApplicationNumber) {
+      duplicateChecks.push({ examApplicationNumber: data.examApplicationNumber });
+    }
+
     const existingApplicant = await prisma.applicant.findFirst({
       where: {
-        OR: [
-          { name: data.name },
-          { examApplicationNumber: data.examApplicationNumber }
-        ]
+        OR: duplicateChecks
       }
     });
 
