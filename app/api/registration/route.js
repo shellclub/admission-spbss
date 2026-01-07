@@ -239,32 +239,38 @@ export async function POST(request) {
     data.educationCertPath = await processFile("educationCertFile", "educert");
     // If file uploaded, force boolean true
     if (data.educationCertPath) data.hasEducationCert = true;
+    data.educationCertCount = parseIntSafe(formData.get("educationCertCount"));
 
     // House Reg
     data.hasHouseReg = parseBoolean(formData.get("hasHouseReg"));
     data.houseRegPath = await processFile("houseRegFile", "housereg");
     if (data.houseRegPath) data.hasHouseReg = true;
+    data.houseRegCount = parseIntSafe(formData.get("houseRegCount"));
 
     // ID Card
     data.hasIdCard = parseBoolean(formData.get("hasIdCard"));
     data.idCardPath = await processFile("idCardFile", "idcard");
     if (data.idCardPath) data.hasIdCard = true;
+    data.idCardCount = parseIntSafe(formData.get("idCardCount"));
 
     // Athlete Cert
     data.hasAthleteCert = parseBoolean(formData.get("hasAthleteCert"));
     data.athleteCertPath = await processFile("athleteCertFile", "athletecert");
     if (data.athleteCertPath) data.hasAthleteCert = true;
+    data.athleteCertCount = parseIntSafe(formData.get("athleteCertCount"));
 
     // Name Change
     data.hasNameChangeCert = parseBoolean(formData.get("hasNameChange"));
     data.nameChangeCertPath = await processFile("nameChangeFile", "namechange");
     if (data.nameChangeCertPath) data.hasNameChangeCert = true;
+    data.nameChangeCertCount = parseIntSafe(formData.get("nameChangeCertCount"));
 
     // Other Docs
     data.hasOtherDocs = parseBoolean(formData.get("hasOtherDocs"));
     data.otherDocsDesc = formData.get("otherDocsDesc");
     data.otherDocsPath = await processFile("otherDocsFile", "otherdocs");
     if (data.otherDocsPath) data.hasOtherDocs = true;
+    data.otherDocsCount = parseIntSafe(formData.get("otherDocsCount"));
 
     data.photoPath = photoPath;
 

@@ -384,9 +384,29 @@ export default function ApplicantForm({ onSuccess, editData }) {
             }
         } catch (error) {
             console.error("เกิดข้อผิดพลาดในการลงทะเบียน:", error);
+            // Parse friendly error message if possible
+            let displayError = error.message || "ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่อีกครั้ง";
+
+            // Try to extract JSON from "ข้อมูลไม่ถูกต้อง: [...]" or just "[...]"
+            try {
+                // Look for JSON array pattern
+                const jsonMatch = displayError.match(/\[.*\]/s);
+                if (jsonMatch) {
+                    const parsed = JSON.parse(jsonMatch[0]);
+                    if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].message) {
+                        // It's a Zod error array
+                        const messages = parsed.map(e => `• ${e.message}`);
+                        displayError = messages.join('<br>');
+                    }
+                }
+            } catch (e) {
+                // If parsing fails, use original message
+                console.log("Error parsing validation message:", e);
+            }
+
             Swal.fire({
                 title: "เกิดข้อผิดพลาด",
-                text: error.message || "ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่อีกครั้ง",
+                html: `<div class="text-left text-slate-700">${displayError}</div>`,
                 icon: "error",
                 confirmButtonColor: "#dc2626",
             });
@@ -406,14 +426,7 @@ export default function ApplicantForm({ onSuccess, editData }) {
 
             {/* Top Action Bar */}
             <div className="flex justify-end gap-3 mb-4">
-                <button
-                    type="button"
-                    onClick={fillSampleData}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700/50 rounded-xl shadow-sm hover:shadow-md transition-all text-yellow-700 dark:text-yellow-400 font-medium group"
-                >
-                    <RefreshCw size={18} className="group-hover:rotate-180 transition-transform" />
-                    <span>ข้อมูลสมมติ</span>
-                </button>
+
                 <Link
                     href="/search"
                     className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm hover:shadow-md transition-all text-slate-700 dark:text-slate-200 font-medium group"
@@ -638,7 +651,7 @@ export default function ApplicantForm({ onSuccess, editData }) {
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                             <div className="md:col-span-12 lg:col-span-5"><FormInput label="สมัครเข้าศึกษาต่อในชั้น" name="appliedLevel" /></div>
                             <div className="md:col-span-8 lg:col-span-5"><FormInput label="ชนิดกีฬา" name="sportType" /></div>
-                            <div className="md:col-span-4 lg:col-span-2"><FormInput label="รหัส" name="sportCode" /></div>
+                            <div className="md:col-span-4 lg:col-span-2"><FormInput label="รหัส" name="sportCode" disabled={true} placeholder="เจ้าหน้าที่ระบุ" /></div>
                         </div>
                     </div>
                 </div>
@@ -754,6 +767,18 @@ export default function ApplicantForm({ onSuccess, editData }) {
                                                         <a href={editData[item.pathKey]} download target="_blank" rel="noopener noreferrer" className="text-[10px] text-slate-500 hover:text-rose-600 flex items-center gap-0.5">
                                                             <Download size={10} /> โหลด
                                                         </a>
+                                                        <button type="button" onClick={() => {
+                                                            const win = window.open(editData[item.pathKey], '_blank');
+                                                            if (win) {
+                                                                // Try to print when loaded, but for some content types (PDF) this might be tricky
+                                                                // For consistency, just opening it is often enough, but we try to trigger print
+                                                                setTimeout(() => { win.print(); }, 1000);
+                                                            } else {
+                                                                alert('Pop-up blocked. Please allow pop-ups for printing.');
+                                                            }
+                                                        }} className="text-[10px] text-slate-500 hover:text-rose-600 flex items-center gap-0.5">
+                                                            <Printer size={10} /> ปริ้น
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
