@@ -12,6 +12,10 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Prisma needs DATABASE_URL during build for schema validation
+# This is a dummy URL - the real one will be provided at runtime
+ENV DATABASE_URL="mysql://dummy:dummy@localhost:3306/dummy"
+
 # Generate Prisma Client
 RUN npx prisma generate
 
@@ -59,8 +63,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Or clearer: Just install prisma globally in this layer.
 USER root
 # Install runtime dependencies for scripts (seed.js) that are not part of standalone build
+# Install runtime dependencies for scripts
 RUN npm install bcryptjs mysql2
-RUN npm install -g prisma
+# Install prisma locally to ensure 'npx prisma' works reliably without downloading
+RUN npm install prisma --save-dev
 USER nextjs
 
 EXPOSE 3000
