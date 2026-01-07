@@ -15,7 +15,8 @@ wait_for_db() {
         echo "Attempting database migration ($count/$max_retries)..."
         
         # Try migration
-        npx prisma db push --accept-data-loss
+        # --skip-generate prevents it from trying to write to node_modules (which fails due to permissions)
+        npx prisma db push --accept-data-loss --skip-generate
         
         # Check exit code
         if [ $? -eq 0 ]; then
