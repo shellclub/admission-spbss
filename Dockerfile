@@ -31,6 +31,13 @@ RUN adduser --system --uid 1001 nextjs
 
 # Copy public folder and ensure permissions
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+
+# Copy start script
+COPY --chown=nextjs:nodejs start.sh ./start.sh
+RUN chmod +x ./start.sh
+
 # Create necessary directories and set permissions
 RUN mkdir -p ./public/uploads/applicants ./public/uploads/documents && \
     chmod -R 777 ./public/uploads && \
@@ -45,6 +52,13 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Install only production dependencies needed for migration (prisma) if not in standalone
+# Actually 'npx prisma' downloads it if missing, but we want it pre-installed for speed/offline
+# We will rely on 'npx' fetching it or copying if valid. 
+# Standalone often strips devDeps. Use 'npm install prisma --no-save' to ensure CLI is present?
+# Or clearer: Just install prisma globally in this layer.
+USER root
+RUN npm install -g prisma
 USER nextjs
 
 EXPOSE 3000
@@ -53,4 +67,4 @@ ENV PORT=3000
 # set hostname to localhost
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["./start.sh"]
