@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
   app:
-    image: ghcr.io/shellclub/admission-spbss:latest # Note: Adjust this if you build image externally, or use build context
-    # For Portainer Stacks + Git, 'build' is supported if using proper git auth, but often image based is faster.
-    # However, since we are deploying via Git Repo in Portainer, we can keep the build context.
+    # image: ghcr.io/shellclub/admission-spbss:latest 
+    # Commented out external image to force Portainer to build from source
+    # This avoids "denied" errors if you haven't set up GHCR authentication
     build:
       context: .
       dockerfile: Dockerfile
