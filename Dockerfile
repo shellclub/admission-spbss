@@ -58,6 +58,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Standalone often strips devDeps. Use 'npm install prisma --no-save' to ensure CLI is present?
 # Or clearer: Just install prisma globally in this layer.
 USER root
+# Install runtime dependencies for scripts (seed.js) that are not part of standalone build
+RUN npm install bcryptjs mysql2
 RUN npm install -g prisma
 USER nextjs
 

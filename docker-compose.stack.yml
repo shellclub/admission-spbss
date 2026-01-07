@@ -25,7 +25,7 @@ services:
       - DATABASE_URL=mysql://root:${DB_PASSWORD:-password123}@db:3306/${DB_NAME:-sport_registration}
       
       # App Config
-      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-supersecretfallbackkey}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
     
