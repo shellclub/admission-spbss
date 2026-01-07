@@ -21,7 +21,8 @@ services:
       - DB_NAME=${DB_NAME}
       
       # Full Connection String (Internal Network)
-      - DATABASE_URL=mysql://root:${DB_PASSWORD}@db:3306/${DB_NAME}
+      # Uses default 'password123' if DB_PASSWORD is not set
+      - DATABASE_URL=mysql://root:${DB_PASSWORD:-password123}@db:3306/${DB_NAME:-sport_registration}
       
       # App Config
       - NEXTAUTH_URL=${NEXTAUTH_URL}
@@ -42,10 +43,10 @@ services:
     container_name: nextjs_db_stack
     restart: always
     environment:
-      - MARIADB_ROOT_PASSWORD=${DB_PASSWORD}
-      - MARIADB_DATABASE=${DB_NAME}
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD} # Fallback
-      - MYSQL_DATABASE=${DB_NAME} # Fallback
+      - MARIADB_ROOT_PASSWORD=${DB_PASSWORD:-password123}
+      - MARIADB_DATABASE=${DB_NAME:-sport_registration}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-password123} # Fallback
+      - MYSQL_DATABASE=${DB_NAME:-sport_registration} # Fallback
     volumes:
       - db_data:/var/lib/mysql
 
