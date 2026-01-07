@@ -47,6 +47,7 @@ services:
       - MARIADB_DATABASE=${DB_NAME:-sport_registration}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-password123} # Fallback
       - MYSQL_DATABASE=${DB_NAME:-sport_registration} # Fallback
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--max-allowed-packet=64M', '--skip-name-resolve']
     volumes:
       - db_data:/var/lib/mysql
 
