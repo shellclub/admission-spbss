@@ -42,8 +42,10 @@ services:
     container_name: nextjs_db_stack
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=${DB_NAME}
+      - MARIADB_ROOT_PASSWORD=${DB_PASSWORD}
+      - MARIADB_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD} # Fallback
+      - MYSQL_DATABASE=${DB_NAME} # Fallback
     volumes:
       - db_data:/var/lib/mysql
 
