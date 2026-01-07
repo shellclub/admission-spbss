@@ -8,6 +8,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      no_cache: true  # Force rebuild without cache to ensure latest Dockerfile changes are applied
     container_name: nextjs_app_stack
     restart: always
     ports:
