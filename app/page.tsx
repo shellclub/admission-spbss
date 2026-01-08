@@ -52,7 +52,7 @@ export default function RegistrationPage() {
 
           <div className="space-y-1">
             <h1 className="text-2xl md:text-4xl font-bold text-white tracking-wide drop-shadow-lg leading-tight">
-              มหาวิทยาลัยการกีฬาแห่งชาติ
+              โรงเรียนกีฬาจังหวัดสุพรรณบุรี
             </h1>
             <p className="text-red-100 text-base md:text-lg font-light">
               National Sports University
@@ -79,7 +79,7 @@ export default function RegistrationPage() {
 
         {/* Footer info */}
         <div className="text-center text-slate-500 dark:text-slate-400 text-sm pb-8 mt-12 font-light">
-          <p>© 2026 มหาวิทยาลัยการกีฬาแห่งชาติ. All rights reserved.</p>
+          <p>© 2026 โรงเรียนกีฬาจังหวัดสุพรรณบุรี. All rights reserved.</p>
           <p className="mt-1 opacity-70">ระบบรับสมัครนักศึกษาออนไลน์</p>
         </div>
       </div>

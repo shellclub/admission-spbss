@@ -127,7 +127,7 @@ export default function LoginPage() {
               {/* Title with Gradient */}
               <h1 className={`text-2xl font-bold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-slate-800'
                 }`}>
-                มหาวิทยาลัยการกีฬาแห่งชาติ
+                โรงเรียนกีฬาจังหวัดสุพรรณบุรี
               </h1>
               <p className={`text-sm font-light mt-1.5 tracking-wide transition-colors duration-300 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'
                 }`}>
@@ -227,7 +227,7 @@ export default function LoginPage() {
 
         {/* Subtle Floating Text Below Card */}
         <p className={`text-center text-xs mt-6 transition-colors duration-300 ${isDarkMode ? 'text-slate-600' : 'text-white/60'}`}>
-          Secure Login Portal • มหาวิทยาลัยการกีฬาแห่งชาติ
+          Secure Login Portal • โรงเรียนกีฬาจังหวัดสุพรรณบุรี
         </p>
       </div>
     </div>
