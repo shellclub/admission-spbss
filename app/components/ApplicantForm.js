@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Swal from "sweetalert2";
@@ -45,6 +45,12 @@ export default function ApplicantForm({ onSuccess, editData }) {
     const formRef = useRef(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);
+
+    // Date of Birth State
+    const [dobDay, setDobDay] = useState("");
+    const [dobMonth, setDobMonth] = useState("");
+    const [dobYear, setDobYear] = useState("");
+
 
     const [gender, setGender] = useState("");
     const [educationLevel, setEducationLevel] = useState("");
@@ -99,7 +105,24 @@ export default function ApplicantForm({ onSuccess, editData }) {
                 setVal('name', editData.name);
                 setGender(editData.gender || '');
                 setVal('age', editData.age);
-                setVal('birthdate', editData.birthdate ? editData.birthdate.split('T')[0] : '');
+                setVal('age', editData.age);
+                // setVal('birthdate', editData.birthdate ? editData.birthdate.split('T')[0] : '');
+                if (editData.birthdate) {
+                    const dateObj = new Date(editData.birthdate);
+                    // Check if it's a valid date
+                    if (!isNaN(dateObj.getTime())) {
+                        const y = dateObj.getFullYear(); // The year stored in DB (already BE if we stored it as such, or AD)
+                        // Wait, user wants to store BE. So if DB has "2560-01-01", getFullYear is 2560.
+                        // But Date object might treat 2560 as AD.
+                        // If we just split the string it's safer if we treat it as a string from DB.
+                        // modify editData.birthdate to string handling if possible or rely on Date parsing
+                        // usage: editData.birthdate.split('T')[0] -> "2560-01-01"
+                        const [yStr, mStr, dStr] = editData.birthdate.split('T')[0].split('-');
+                        setDobYear(yStr);
+                        setDobMonth(mStr);
+                        setDobDay(dStr);
+                    }
+                }
                 setVal('race', editData.race);
                 setVal('nationality', editData.nationality);
                 setVal('religion', editData.religion);
@@ -235,7 +258,12 @@ export default function ApplicantForm({ onSuccess, editData }) {
         setVal('name', `${prefix}${firstName} ${lastName}`);
         setGender(randGender);
         setVal('age', String(age));
-        setVal('birthdate', `${birthYear}-${birthMonth}-${birthDay}`);
+        setVal('age', String(age));
+        // setVal('birthdate', `${birthYear}-${birthMonth}-${birthDay}`);
+        setDobDay(birthDay);
+        setDobMonth(birthMonth);
+        setDobYear(String(Number(birthYear) + 543)); // Mock BE year
+
         setVal('race', 'ไทย');
         setVal('nationality', 'ไทย');
         setVal('religion', 'พุทธ');
@@ -341,6 +369,29 @@ export default function ApplicantForm({ onSuccess, editData }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+
+        // === Custom Validation ===
+        const requiredDocs = [
+            { key: 'educationCertFile', pathKey: 'educationCertPath', label: 'หลักฐานการศึกษา (ปพ.1 หรือ ปพ.7)' },
+            { key: 'houseRegFile', pathKey: 'houseRegPath', label: 'ทะเบียนบ้าน' },
+            { key: 'idCardFile', pathKey: 'idCardPath', label: 'บัตรประจำตัวประชาชนหรือสูติบัตร' }
+        ];
+
+        for (const doc of requiredDocs) {
+            const hasFile = selectedFiles[doc.key] || (editData && editData[doc.pathKey]);
+            if (!hasFile) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'เอกสารไม่ครบ',
+                    text: `กรุณาแนบ ${doc.label}`,
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'ตกลง'
+                });
+                return;
+            }
+        }
+
         setIsSubmitting(true);
 
         try {
@@ -506,7 +557,48 @@ export default function ApplicantForm({ onSuccess, editData }) {
                         <FormInput label="อายุ" name="age" type="number" />
                     </div>
                     <div className="md:col-span-4 lg:col-span-4">
-                        <FormInput label="วันเกิด" name="birthdate" type="date" />
+                        <div className="md:col-span-4 lg:col-span-4">
+                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">วันเกิด (ปี พ.ศ. เช่น 2560)</label>
+                            <div className="flex gap-2">
+                                <select
+                                    value={dobDay}
+                                    onChange={(e) => setDobDay(e.target.value)}
+                                    className="w-1/4 rounded-xl border-slate-200 p-2.5 bg-slate-50"
+                                    required
+                                >
+                                    <option value="">วัน</option>
+                                    {Array.from({ length: 31 }, (_, i) => {
+                                        const d = String(i + 1).padStart(2, '0');
+                                        return <option key={d} value={d}>{i + 1}</option>;
+                                    })}
+                                </select>
+                                <select
+                                    value={dobMonth}
+                                    onChange={(e) => setDobMonth(e.target.value)}
+                                    className="w-2/4 rounded-xl border-slate-200 p-2.5 bg-slate-50"
+                                    required
+                                >
+                                    <option value="">เดือน</option>
+                                    {[
+                                        "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+                                        "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+                                    ].map((m, i) => (
+                                        <option key={i} value={String(i + 1).padStart(2, '0')}>{m}</option>
+                                    ))}
+                                </select>
+                                <input
+                                    type="text"
+                                    value={dobYear}
+                                    onChange={(e) => setDobYear(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                                    placeholder="พ.ศ. (เช่น 2560)"
+                                    className="w-1/4 rounded-xl border-slate-200 p-2.5 bg-slate-50 text-center"
+                                    required
+                                    minLength={4}
+                                    maxLength={4}
+                                />
+                            </div>
+                            <input type="hidden" name="birthdate" value={dobYear && dobMonth && dobDay ? `${dobYear}-${dobMonth}-${dobDay}` : ''} />
+                        </div>
                     </div>
                     <div className="md:col-span-4 lg:col-span-3">
                         <FormInput label="เชื้อชาติ" name="race" />
@@ -664,7 +756,7 @@ export default function ApplicantForm({ onSuccess, editData }) {
                 <SectionHeader icon={FileText} title="หลักฐานการสมัคร" />
                 <div className="space-y-4">
                     {[
-                        { label: 'หลักฐานการศึกษา (ปพ.1)', name: 'hasEducationCert', count: 'educationCertCount', file: 'educationCertFile', pathKey: 'educationCertPath' },
+                        { label: 'หลักฐานการศึกษา (ปพ.1 หรือ ปพ.7)', name: 'hasEducationCert', count: 'educationCertCount', file: 'educationCertFile', pathKey: 'educationCertPath' },
                         { label: 'ทะเบียนบ้าน', name: 'hasHouseReg', count: 'houseRegCount', file: 'houseRegFile', pathKey: 'houseRegPath' },
                         { label: 'บัตรประจำตัวประชาชนหรือสูติบัตร', name: 'hasIdCard', count: 'idCardCount', file: 'idCardFile', pathKey: 'idCardPath' },
                         { label: 'เกียรติบัตรแสดงความสามารถทางการกีฬา', name: 'hasAthleteCert', count: 'athleteCertCount', file: 'athleteCertFile', pathKey: 'athleteCertPath' },
