@@ -118,7 +118,9 @@ export default function ApplicantForm({ onSuccess, editData }) {
                         // modify editData.birthdate to string handling if possible or rely on Date parsing
                         // usage: editData.birthdate.split('T')[0] -> "2560-01-01"
                         const [yStr, mStr, dStr] = editData.birthdate.split('T')[0].split('-');
-                        setDobYear(yStr);
+                        // Convert AD (Database) to BE (Display)
+                        setDobYear(String(Number(yStr) + 543));
+
                         setDobMonth(mStr);
                         setDobDay(dStr);
                     }
@@ -586,18 +588,24 @@ export default function ApplicantForm({ onSuccess, editData }) {
                                         <option key={i} value={String(i + 1).padStart(2, '0')}>{m}</option>
                                     ))}
                                 </select>
-                                <input
-                                    type="text"
+                                <select
                                     value={dobYear}
-                                    onChange={(e) => setDobYear(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                                    placeholder="พ.ศ. (เช่น 2560)"
-                                    className="w-1/4 rounded-xl border-slate-200 p-2.5 bg-slate-50 text-center"
+                                    onChange={(e) => setDobYear(e.target.value)}
+                                    className="w-1/4 rounded-xl border-slate-200 p-2.5 bg-slate-50"
                                     required
-                                    minLength={4}
-                                    maxLength={4}
-                                />
+                                >
+                                    <option value="">ปี พ.ศ.</option>
+                                    {Array.from({ length: 35 }, (_, i) => {
+                                        const currentYear = new Date().getFullYear() + 543;
+                                        const y = currentYear - i; // Allow until current year for flexibility, or maybe slightly past
+                                        // Adjusting range to be reasonable for students (e.g., 5-30 years old)
+                                        // If we start from current year, we cover very young kids too.
+                                        // Let's just list last 35 years from current year for simplicity.
+                                        return <option key={y} value={y}>{y}</option>;
+                                    })}
+                                </select>
                             </div>
-                            <input type="hidden" name="birthdate" value={dobYear && dobMonth && dobDay ? `${dobYear}-${dobMonth}-${dobDay}` : ''} />
+                            <input type="hidden" name="birthdate" value={dobYear && dobMonth && dobDay ? `${Number(dobYear) - 543}-${dobMonth}-${dobDay}` : ''} />
                         </div>
                     </div>
                     <div className="md:col-span-4 lg:col-span-3">
